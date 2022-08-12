@@ -1,5 +1,2 @@
-<<<<<<< HEAD
 web:nodemon server.js
-=======
-web:node server.js
->>>>>>> 59b14c9285245f6c8cbc2ac392103d4ecd2bce97
+
