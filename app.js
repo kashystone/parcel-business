@@ -11,6 +11,7 @@ const swaggerjsDoc = require('swagger-jsdoc');
 
 dotenv.config();
 
+const PORT = process.env.PORT || 3000;
 
 const options = {
     definition: {
@@ -101,5 +102,6 @@ app.use((error, req, res, next)=> {
     })
 })
 
+app.listen(PORT, () => console.log(`app is running on port ${PORT}`));
 
 module.exports = app;
