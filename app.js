@@ -89,7 +89,7 @@ app.use('/products', productsRouter);
 app.use('/users', usersRouter);
 
 app.use((req, res, next) => {
-    const error = new Error('Not found');
+    const error = new Error('Not founde');
     error.status = 404;
     next(error);
 });
