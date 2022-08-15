@@ -1,15 +1,17 @@
 const express = require('express');
+const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose');
+const path = require('path')
 const dotenv = require('dotenv');
 const swaggerUI = require('swagger-ui-express');
 const swaggerjsDoc = require('swagger-jsdoc');
 
 
-const app = express();
+
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -84,7 +86,7 @@ app.use((req, res, next)=> {
     next();
 });
 
-app.get('/',function (req,res){
+app.get('/', function (req,res){
     res.sendFile(path.join(__dirname + '/front/index.html'));
 });
 
