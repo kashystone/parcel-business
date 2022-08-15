@@ -9,7 +9,7 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerjsDoc = require('swagger-jsdoc');
 
 
-
+const app = express();
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -47,10 +47,9 @@ const options = {
 
 };
 
+
+
 const swaggerDocs = swaggerjsDoc(options);
-
-const app = express();
-
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 mongoose.promise = global.promise;
@@ -83,6 +82,10 @@ app.use((req, res, next)=> {
     //     return res.status(200).json({});
     // }
     next();
+});
+
+app.get('/',function (req,res){
+    res.sendFile(path.join(__dirname + 'front/index.html'));
 });
 
 app.use('/products', productsRouter);
