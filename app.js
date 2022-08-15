@@ -51,7 +51,7 @@ const swaggerDocs = swaggerjsDoc(options);
 
 const app = express();
 
-app.get('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 mongoose.promise = global.promise;
 
