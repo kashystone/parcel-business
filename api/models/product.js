@@ -21,12 +21,12 @@ const productSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        
+
     },
     currentLocation: {
         type: String,
         required: true
-        
+
     },
     recipientName: {
         type: String,
@@ -38,10 +38,10 @@ const productSchema = new mongoose.Schema({
     },
     userId: {
         type: String,
-        
+
     }
-    
-    
+
+
 
 });
 

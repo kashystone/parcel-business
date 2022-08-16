@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         lowercase: true,
-        
+
     },
     email: {
         type: String,
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 6
-    
+
     },
 
     phoneNumber: {
@@ -29,12 +29,21 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 6,
         match: /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})/
-        
-    
+
+
     },
 
-    
-       
+    address: {
+        type: String,
+        required: true,
+        minlength: 6,
+
+
+
+    },
+
+
+
 
 });
 

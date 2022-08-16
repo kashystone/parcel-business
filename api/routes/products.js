@@ -28,7 +28,7 @@ router.get('/', roleAuth, (req, res, next) => {
                         recipientNumber: dat.recipientNumber,
                         status: dat.status,
                         userId: User._id,
-                        
+
                         request: {
                             type: 'GET',
                             url: 'http//localhost:3000/products/' + dat._id
@@ -62,7 +62,7 @@ router.post('/', checkAuth, (req, res, next) => {
         recipientName: req.body.recipientName,
         recipientNumber: req.body.recipientNumber,
         userId: user.userId,
-        
+
     });
     product
         .save()
@@ -97,17 +97,17 @@ router.post('/', checkAuth, (req, res, next) => {
 
 router.get('/user', checkAuth, (req, res, next) => {
     const user = req.userData;
-    Product.find({userId: user.userId})
+    Product.find({ userId: user.userId })
         .select('itemDescription price pickupLocation currentLocation destination recipientName recipientNumber status userId')
         .exec()
         .then(data => {
-           
-             const response = {
-                products : data
-             };
-                return res.status(200).json({data: data})
-                
-            })
+
+            const response = {
+                products: data
+            };
+            return res.status(200).json({ data: data })
+
+        })
         .catch(err => {
             console.log(err);
             res.status(500).json({ error: err })
@@ -133,7 +133,7 @@ router.put('/:productId/status', roleAuth, (req, res, next) => {
         .catch(err => { res.status(500).json({ error: err }) });
 });
 
-router.put('/:productId/destination', checkAuth,(req, res, next) => {
+router.put('/:productId/destination', checkAuth, (req, res, next) => {
     const id = req.params.productId
     const destination = req.body.destination;
     Product.updateOne({ _id: id }, { destination: destination }, { upsert: true })

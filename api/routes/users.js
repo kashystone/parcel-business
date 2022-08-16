@@ -24,6 +24,8 @@ const roleAuth = require('../middleware/role_Auth');
  *                         type: string
  *                     phoneNumber:
  *                         type: string
+ *                     address:
+ *                         type: string
  * 
  *          
  */
@@ -344,7 +346,7 @@ router.post("/signup", (req, res, next) => {
                     message: 'User exists!'
                 });
             } else {
-                 bcrypt.hash(req.body.password, 10, (err, hash) => {
+                bcrypt.hash(req.body.password, 10, (err, hash) => {
 
 
                     if (err) {
@@ -360,6 +362,7 @@ router.post("/signup", (req, res, next) => {
                             email: req.body.email,
                             password: hash,
                             phoneNumber: req.body.phoneNumber,
+                            address: req.body.address
 
 
 
@@ -398,7 +401,7 @@ router.post("/signup", (req, res, next) => {
 
 
 });
-router.post("/login",  (req, res,) => {
+router.post("/login", (req, res,) => {
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
