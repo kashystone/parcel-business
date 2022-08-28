@@ -13,7 +13,7 @@ const swaggerjsDoc = require('swagger-jsdoc');
 
 
 dotenv.config();
-
+app.use(cors())
 const PORT = process.env.PORT || 3000;
 
 const options = {
