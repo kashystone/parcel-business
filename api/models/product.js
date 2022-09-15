@@ -7,9 +7,11 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    weight: {
+        type: Number,  
+    },
     price: {
-        type: Number,
-        required: true,
+        type: Number,  
     },
     pickupLocation: {
         type: String,
@@ -25,7 +27,7 @@ const productSchema = new mongoose.Schema({
     },
     currentLocation: {
         type: String,
-        required: true
+        
 
     },
     recipientName: {
