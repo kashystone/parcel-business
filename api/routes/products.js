@@ -55,7 +55,7 @@ router.post('/', checkAuth, (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         itemDescription: req.body.itemDescription,
         weight: req.body.weight,
-        price: req.body.weight * 330,
+        price: weight * 330,
         pickupLocation: req.body.pickupLocation,
         destination: req.body.destination,
         status: "created",
@@ -72,7 +72,6 @@ router.post('/', checkAuth, (req, res, next) => {
                 createdproduct: {
                     _id: data._id,
                     itemDescription: data.itemDescription,
-                    weight:data.weight,
                     price: data.price,
                     pickupLocation: data.pickupLocation,
                     destination: data.destination,
