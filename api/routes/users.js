@@ -141,8 +141,10 @@ const roleAuth = require('../middleware/role_Auth');
  *                properties:
  *                     itemDescription: 
  *                         type: string
+ *                     weight: 
+ *                         type: number 
  *                     price: 
- *                         type: string
+ *                         type: number
  *                     pickupLocation:
  *                         type: string
  *                     destination: 
@@ -152,7 +154,7 @@ const roleAuth = require('../middleware/role_Auth');
  *                     recipientName:
  *                         type: string
  *                     recipientNumber:
- *                         type: string
+ *                         type: number
  *                    
  * 
  *          
