@@ -14,7 +14,13 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
         lowercase: true,
-        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        validate: {
+            validator: function (v) {
+              return /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(v);
+            },
+            message: (props) => `Enter a valid ${props.path} address!`,
+          },
+      
     },
 
     password: {
@@ -25,11 +31,18 @@ const userSchema = new mongoose.Schema({
     },
 
     phoneNumber: {
-        type: Number,
+        type: String,
         required: true,
-        minlength: 6,
-        match: /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})/
-
+        minlength: 8,
+        validate: {
+            validator: function (v) {
+              return /^(\+|00)[0-9]{1,3}[0-9]{7,14}(?:x.+)?$/.test(v);
+            },
+            message: (props) =>
+              `${props.path} should be atleast (8)characters! & should contain a country code`,
+          },
+      
+      
 
     },
 

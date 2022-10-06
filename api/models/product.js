@@ -36,8 +36,15 @@ const productSchema = new mongoose.Schema({
         required: true,
     },
     recipientNumber: {
-        type: Number,
+        type: String,
         required: true,
+        validate: {
+            validator: function (v) {
+              return /^(\+|00)[0-9]{1,3}[0-9]{7,14}(?:x.+)?$/.test(v);
+            },
+            message: (props) =>
+              `${props.path} should be atleast (8)characters! & should contain a country code`,
+          },
     },
     userId: {
         type: String,

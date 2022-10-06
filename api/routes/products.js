@@ -9,6 +9,22 @@ const roleAuth = require('../middleware/role_Auth');
 const Product = require('../models/product');
 
 
+const errorFormatter = (e) => {
+    let errors = {};
+  
+    // "User validation failed: email: Enter a valid email address!, phoneNumber: phoneNumber is not a valid!"
+  
+    const allErrors = e.substring(e.indexOf(":") + 1).trim();
+    const allErrorsFormatted = allErrors.split(",").map((err) => err.trim());
+    allErrorsFormatted.forEach((error) => {
+      const [key, value] = error.split(":").map((err) => err.trim());
+      errors[key] = value;
+    });
+    return errors;
+  };
+
+
+
 
 router.get('/', roleAuth, (req, res, next) => {
     Product.find()
@@ -29,11 +45,7 @@ router.get('/', roleAuth, (req, res, next) => {
                         status: dat.status,
                         userId: User._id,
 
-                        request: {
-                            type: 'GET',
-                            url: 'http//localhost:3000/products/' + dat._id
-
-                        }
+                        
                     };
                 })
 
@@ -79,19 +91,14 @@ router.post('/', checkAuth, (req, res, next) => {
                     recipientNumber: data.recipientNumber,
                     status: data.status,
                     userId: data.userId,
-                    request: {
-                        type: 'GET',
-                        url: 'http//localhost:3000/products/' + data._id
-
-                    }
-
+                
 
                 }
             })
 
-        }).catch(err => {
-            console.log(err);
-            res.status(400).json({ error: err })
+        }).catch(e => {
+            
+            res.status(400).json({ error: errorFormatter(e.message) })
         });
 
 });
@@ -120,16 +127,20 @@ router.get('/user', checkAuth, (req, res, next) => {
 router.put('/:productId/status', roleAuth, (req, res, next) => {
     const id = req.params.productId
     const status = req.body.status;
+    const stat = ["created", "in-transit", "delivered"];
+    if(!stat.includes(status))
+    return res.status(401).json({message: "status invalid", status: 0})
+
     Product.updateOne({ _id: id }, { status: status }, { upsert: true })
         .then(data => {
+          
+           
             res.status(200).json({
-                message: 'Product updated',
-                data: data,
-                request: {
-                    type: 'GET',
-                    url: 'http//localhost:3000/products/' + id
-                }
+                message: 'Status updated',
+               
+               
             });
+        
         })
         .catch(err => { res.status(500).json({ error: err }) });
 });
@@ -140,12 +151,9 @@ router.put('/:productId/destination', checkAuth, (req, res, next) => {
     Product.updateOne({ _id: id }, { destination: destination }, { upsert: true })
         .then(data => {
             res.status(200).json({
-                message: 'Product updated',
-                data: data,
-                request: {
-                    type: 'GET',
-                    url: 'http//localhost:3000/products/' + id
-                }
+                message: 'Destination updated',
+                
+                
             });
         })
         .catch(err => { res.status(500).json({ error: err }) });
@@ -157,12 +165,8 @@ router.put('/:productId/currentLocation', roleAuth, (req, res, next) => {
     Product.updateOne({ _id: id }, { currentLocation: currentLocation }, { upsert: true })
         .then(data => {
             res.status(200).json({
-                message: 'Product updated',
-                data: data,
-                request: {
-                    type: 'GET',
-                    url: 'http//localhost:3000/products/' + id
-                }
+                message: 'Current Location updated',
+               
             });
         })
         .catch(err => { res.status(500).json({ error: err }) });
@@ -175,11 +179,7 @@ router.delete('/:productId', checkAuth, (req, res, next) => {
         .then(result => {
             res.status(200).json({
                 message: 'Product Deleted',
-                request: {
-                    type: 'POST',
-                    url: 'http://localhost:3000/products',
-                    data: {},
-                }
+               
             })
         })
         .catch(err => {

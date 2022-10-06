@@ -154,7 +154,7 @@ const roleAuth = require('../middleware/role_Auth');
  *                     recipientName:
  *                         type: string
  *                     recipientNumber:
- *                         type: number
+ *                         type: string
  *                    
  * 
  *          
@@ -335,7 +335,19 @@ const roleAuth = require('../middleware/role_Auth');
  */
 
 
-
+ const errorFormatter = (e) => {
+    let errors = {};
+  
+    // "User validation failed: email: Enter a valid email address!, phoneNumber: phoneNumber is not a valid!"
+  
+    const allErrors = e.substring(e.indexOf(":") + 1).trim();
+    const allErrorsFormatted = allErrors.split(",").map((err) => err.trim());
+    allErrorsFormatted.forEach((error) => {
+      const [key, value] = error.split(":").map((err) => err.trim());
+      errors[key] = value;
+    });
+    return errors;
+  };
 
 
 
@@ -343,19 +355,25 @@ router.post("/signup", (req, res, next) => {
     User.find({ email: req.body.email })
         .exec()
         .then(doc => {
-            if (doc >= 1) {
+            
+            if (doc.length >= 1) {
                 return res.status(409).json({
                     message: 'User exists!'
                 });
-            } else {
+            }else {
+                const {password} = req.body;
+                if (password.length < 6){
+                    res.status(400).json({errors: "Password should be atleast 6 characters long"});
+                }else {
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
 
-
-                    if (err) {
-                        return res.status(402).json({
-                            error: err,
-
-                        });
+                    bcrypt.compare(password, User.password, () => {
+                        if (err) {
+                            return res.status(402).json({
+                                message: "Incorrect Password",
+    
+                            });
+                    
                     } else {
 
                         const user = new User({
@@ -382,23 +400,25 @@ router.post("/signup", (req, res, next) => {
                                 }, process.env.JWT_KEY,
                                     {
                                         expiresIn: "1h"
-                                    })
+                                    });
 
                                 res.status(200).json({
                                     message: 'You have sucessfully signed up',
-                                    token: token
+                                    token: token,
 
 
-                                })
+                                });
 
                             })
-                            .catch(err => {
-                                res.status(500).json({ error: err })
+                            
+                            .catch(e => {
+                                res.status(500).json({ errors: errorFormatter(e.message),})
                             });
                     }
                 });
-            };
-        })
+            });
+        }
+}});
 
 
 
@@ -414,9 +434,13 @@ router.post("/login", (req, res,) => {
                 });
             }
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-                if (err) {
-                    return res.status(401).json({
-                        message: 'Incorrect Username/Password!'
+                console.log("this is e==>",err, "this is res==>",result)
+                if (err) { 
+                    return res.status(402).json({
+                        error: 'Incorrect Username/Password!'
+                      
+
+
 
                     });
                 }
@@ -437,6 +461,9 @@ router.post("/login", (req, res,) => {
 
                     })
                 }
+                res.status(400).json({
+                    message:"incorrect email/password"
+                })
             })
 
         });
